@@ -2,21 +2,31 @@
 <html lang="ta">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>Indo Campas Catalogue</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="rotate-hint">📱 Better view ku phone ah landscape la thirumbunga</div>
+  <div id="app">
+    <div class="topbar">
+      <button id="zoomOut" title="Zoom out">−</button>
+      <button id="zoomReset" title="Reset zoom">100%</button>
+      <button id="zoomIn" title="Zoom in">+</button>
+      <button id="rotateBtn" title="Rotate">⟳ Rotate</button>
+      <button id="fsBtn" title="Full screen">⛶</button>
+    </div>
 
-  <div class="scene">
-    <div class="book" id="book"></div>
-  </div>
+    <div class="scene" id="scene">
+      <div class="stage" id="stage">
+        <div class="book" id="book"></div>
+      </div>
+    </div>
 
-  <div class="controls">
-    <button id="prev">◀ Previous</button>
-    <span id="status">Cover</span>
-    <button id="next">Next ▶</button>
+    <div class="controls">
+      <button id="prev">◀ Previous</button>
+      <span id="status">Cover</span>
+      <button id="next">Next ▶</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

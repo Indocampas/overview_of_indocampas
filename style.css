@@ -1,30 +1,76 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
-  /* JavaScript idhai screen ku thagundha mathri automatic ah maathum */
-  --w: 300px;   /* oru page width */
-  --h: 450px;   /* oru page height */
+  --w: 300px;
+  --h: 450px;
 }
 
-html, body { height: 100%; }
-
-body {
-  height: 100dvh;
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;          /* browser zoom/scroll off, namma custom zoom use pannom */
+  overscroll-behavior: none;
   background: radial-gradient(circle at center, #4a3b2e, #1c1511);
+  font-family: Arial, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-  touch-action: pan-y;
+  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
+  transform-origin: top left;
 }
 
-.scene {
-  perspective: 2500px;
+.topbar {
+  height: 40px;
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+.topbar button {
+  min-width: 36px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+.topbar button:active { background: rgba(255,255,255,.2); }
+.topbar button:disabled { opacity: .35; }
+
+/* Zoom aagumbodhu topbar/controls mela overlap aagaama clip pannum */
+.scene {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.stage {
+  width: 100%;
+  height: 100%;
+  perspective: 2500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 .book {
@@ -57,7 +103,7 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-color: #fff;
-  background-size: 100% 100%;   /* image full ah frame la fit, crop aagaadhu */
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
@@ -72,7 +118,6 @@ body {
   box-shadow: -4px 4px 14px rgba(0,0,0,.45);
 }
 
-/* Spine pakkam paper shading */
 .front::after, .back::after {
   content: "";
   position: absolute;
@@ -91,12 +136,14 @@ body {
 }
 
 .controls {
-  height: 56px;
+  height: 52px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 14px;
   color: #eee;
   font-size: 14px;
+  z-index: 10;
 }
 .controls button {
   padding: 9px 18px;
@@ -109,21 +156,9 @@ body {
 }
 .controls button:disabled { opacity: .4; cursor: default; }
 
-/* Phone portrait la mattum hint */
-.rotate-hint {
-  display: none;
-  position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,.6);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  z-index: 9999;
-  white-space: nowrap;
-}
-@media (orientation: portrait) and (max-width: 700px) {
-  .rotate-hint { display: block; }
+@media (max-width: 700px), (max-height: 500px) {
+  .topbar { height: 36px; gap: 6px; }
+  .topbar button { padding: 5px 10px; font-size: 13px; }
+  .controls { height: 46px; gap: 10px; }
+  .controls button { padding: 7px 14px; font-size: 14px; }
 }
