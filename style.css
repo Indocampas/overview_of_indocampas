@@ -1,0 +1,129 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  /* JavaScript idhai screen ku thagundha mathri automatic ah maathum */
+  --w: 300px;   /* oru page width */
+  --h: 450px;   /* oru page height */
+}
+
+html, body { height: 100%; }
+
+body {
+  height: 100dvh;
+  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.scene {
+  perspective: 2500px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.book {
+  position: relative;
+  width: calc(var(--w) * 2);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+  transform: translateX(-25%);
+}
+.book.open { transform: translateX(0); }
+.book.end  { transform: translateX(25%); }
+
+.leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(.645, .045, .355, 1);
+  cursor: pointer;
+}
+.leaf.flipped { transform: rotateY(-180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: #fff;
+  background-size: 100% 100%;   /* image full ah frame la fit, crop aagaadhu */
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.front {
+  border-radius: 0 6px 6px 0;
+  box-shadow: 4px 4px 14px rgba(0,0,0,.45);
+}
+.back {
+  transform: rotateY(180deg);
+  border-radius: 6px 0 0 6px;
+  box-shadow: -4px 4px 14px rgba(0,0,0,.45);
+}
+
+/* Spine pakkam paper shading */
+.front::after, .back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.front::after {
+  background: linear-gradient(to right, rgba(0,0,0,.28), rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,.06));
+}
+.back::after {
+  background: linear-gradient(to left, rgba(0,0,0,.28), rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,.06));
+}
+
+.face.blank {
+  background: linear-gradient(135deg, #7a0f24, #4a0614);
+}
+
+.controls {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #eee;
+  font-size: 14px;
+}
+.controls button {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #c9a46c;
+  color: #2b1d0e;
+  font-size: 15px;
+  cursor: pointer;
+}
+.controls button:disabled { opacity: .4; cursor: default; }
+
+/* Phone portrait la mattum hint */
+.rotate-hint {
+  display: none;
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  z-index: 9999;
+  white-space: nowrap;
+}
+@media (orientation: portrait) and (max-width: 700px) {
+  .rotate-hint { display: block; }
+}
