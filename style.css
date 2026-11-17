@@ -9,7 +9,184 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  touch-action: none;          /* browser zoom/scroll off, namma custom zoom use pannom */
+  touch-action: none;
+  overscroll-behavior: none;
+  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
+  font-family: Arial, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
+  transform-origin: top left;
+  overflow: hidden;
+}
+
+.scene {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.stage {
+  width: 100%;
+  height: 100%;
+  perspective: 2600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* ---------- Book (double page / landscape) ---------- */
+.book {
+  position: relative;
+  width: calc(var(--w) * 2);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transition: transform .8s ease;
+  transform: translateX(-25%);
+  flex-shrink: 0;
+}
+.book.open { transform: translateX(0); }
+.book.end  { transform: translateX(25%); }
+
+/* ---------- Book (single page / portrait) ---------- */
+.book.single {
+  width: var(--w);
+  transform: none !important;
+}
+
+.leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+}
+.book.single .leaf { left: 0; width: 100%; }
+.leaf.flipped { transform: rotateY(-180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: #fff;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.face.none { display: none; }
+.front {
+  border-radius: 0 6px 6px 0;
+  box-shadow: 3px 3px 12px rgba(0,0,0,.4);
+}
+.book.single .front { border-radius: 4px; }
+.back {
+  transform: rotateY(180deg);
+  border-radius: 6px 0 0 6px;
+  box-shadow: -3px 3px 12px rgba(0,0,0,.4);
+}
+
+/* spine shade */
+.front::after, .back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.front::after {
+  background: linear-gradient(to right, rgba(0,0,0,.25), rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,.05));
+}
+.book.single .front::after { background: none; }
+.back::after {
+  background: linear-gradient(to left, rgba(0,0,0,.25), rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,.05));
+}
+
+/* paper bend shadow (animated while flipping) */
+.shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.55), rgba(0,0,0,.05) 60%, rgba(255,255,255,.15));
+}
+.back .shade {
+  background: linear-gradient(to left, rgba(0,0,0,.55), rgba(0,0,0,.05) 60%, rgba(255,255,255,.15));
+}
+
+.face.blank {
+  background: linear-gradient(135deg, #7a0f24, #4a0614);
+}
+
+/* ---------- Controls ---------- */
+.controls {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  color: #eee;
+  font-size: 14px;
+  z-index: 10;
+}
+.controls .group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.controls button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #c9a46c;
+  color: #2b1d0e;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.controls button:active { filter: brightness(.9); }
+.controls button:disabled { opacity: .4; cursor: default; }
+#status { min-width: 80px; text-align: center; }
+
+/* landscape phone: oru row la compact ah */
+@media (max-height: 500px) {
+  .controls { flex-wrap: nowrap; gap: 10px; padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)); }
+  .controls button { padding: 5px 10px; font-size: 13px; }
+  .controls { font-size: 13px; }
+}
+
+/* * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --w: 300px;
+  --h: 450px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;          
   overscroll-behavior: none;
   background: radial-gradient(circle at center, #4a3b2e, #1c1511);
   font-family: Arial, sans-serif;
@@ -53,7 +230,6 @@ html, body {
 .topbar button:active { background: rgba(255,255,255,.2); }
 .topbar button:disabled { opacity: .35; }
 
-/* Zoom aagumbodhu topbar/controls mela overlap aagaama clip pannum */
 .scene {
   flex: 1;
   width: 100%;
@@ -161,4 +337,4 @@ html, body {
   .topbar button { padding: 5px 10px; font-size: 13px; }
   .controls { height: 46px; gap: 10px; }
   .controls button { padding: 7px 14px; font-size: 14px; }
-}
+} */
