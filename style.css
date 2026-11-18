@@ -225,6 +225,7 @@ html, body {
   .side-btn { width: 38px; height: 54px; font-size: 18px; }
 }
 
+
 /* Portrait: last page la atta page oda attach aagi book close aana look */
 /* .book.single.end::before {
   left: -5px;
@@ -240,69 +241,37 @@ html, body {
   transition: right .5s ease;
 } */
 
-/* Portrait: last page la atta page oda attach aagi book close aana look */
+/* Portrait: last page-oda back cover otti irukkura look */
 .book.single.end::before {
-  left: -5px;
-  right: -10px;
-  top: -5px;
-  bottom: -5px;
-  border-radius: 6px 10px 10px 6px;
+  left: -6px;
+  right: -14px;
+  top: -6px;
+  bottom: -6px;
+  border-radius: 6px 12px 12px 6px;
+  border-width: 2px;
   box-shadow:
-    0 10px 24px rgba(0,0,0,.55),
-    inset 0 0 10px rgba(0,0,0,.4),
-    3px 0 0 #efe4c8,
-    5px 0 0 #c9a46c;
-  transition: right .5s ease;
+    0 12px 26px rgba(0,0,0,.6),
+    inset 0 0 12px rgba(0,0,0,.45),
+    inset 8px 0 10px rgba(0,0,0,.25);   /* spine shade */
+  transition: right .5s ease, left .5s ease;
 }
 
-/* * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-:root {
-  --w: 300px;
-  --h: 450px;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  touch-action: none;
-  overscroll-behavior: none;
-  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
-  font-family: Arial, sans-serif;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-#app {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: radial-gradient(circle at center, #4a3b2e, #1c1511);
-  transform-origin: top left;
-  overflow: hidden;
-}
-
-.scene {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.stage {
-  width: 100%;
-  height: 100%;
-  perspective: 2600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform-origin: center center;
-  will-change: transform;
+/* page thickness (pages stack edge) - last page-ku pakkathula */
+.book.single.end::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: -7px;
+  width: 7px;
+  border-radius: 0 3px 3px 0;
+  background:
+    repeating-linear-gradient(to right,
+      #f4ecd6 0, #f4ecd6 1px,
+      #d8cba8 1px, #d8cba8 2px);
+  box-shadow: 1px 0 2px rgba(0,0,0,.35);
+  transform: translateZ(-2px);
+  pointer-events: none;
 }
 
 /* ---------- Book (double page / landscape) ---------- */
